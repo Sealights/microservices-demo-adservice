@@ -22,6 +22,7 @@ RUN chmod +x gradlew
 RUN ./gradlew downloadRepos
 
 COPY . .
+RUN java -jar sl-build-scanner.jar -gradle -configfile slgradle.json -workspacepath .
 RUN chmod +x gradlew
 RUN ./gradlew installDist
 
@@ -38,6 +39,10 @@ RUN GRPC_HEALTH_PROBE_VERSION=v0.4.8 && \
 WORKDIR /app
 COPY --from=builder /app .
 COPY agent/opentelemetry-javaagent.jar .
+
+ENV JAVA_TOOL_OPTIONS="-javaagent:sl-test-listener.jar -Dsl.tags=script,container -Dsl.labId=integ_test_otel"
+
+RUN apt-get update && apt-get install -y procps
 
 EXPOSE 9555
 ENTRYPOINT ["/app/build/install/hipstershop/bin/AdService"]
