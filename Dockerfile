@@ -16,6 +16,8 @@ FROM openjdk:18-slim as builder
 
 WORKDIR /app
 
+RUN apt-get -y update && apt-get -y install git
+
 COPY ["build.gradle", "gradlew", "./"]
 COPY gradle gradle
 RUN chmod +x gradlew
