@@ -18,6 +18,9 @@ WORKDIR /app
 
 RUN apt-get -y update && apt-get -y install git
 
+RUN apt-get install wget 
+RUN wget -O sl-build-scanner.jar https://oss.sonatype.org/service/local/repositories/releases/content/io/sealights/on-premise/agents/sl-build-scanner/3.1.1993/sl-build-scanner-3.1.1993.jar
+
 COPY ["build.gradle", "gradlew", "./"]
 COPY gradle gradle
 RUN chmod +x gradlew
