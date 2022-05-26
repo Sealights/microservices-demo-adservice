@@ -5,5 +5,6 @@
   "branchName": "master",
   "buildName": "SL_Timestamp",
   "packagesIncluded": "*hipstershop.AdService*",
-  "packagesExcluded": "*hipstershop.AdServiceGrpc*"
+  "packagesExcluded": "*hipstershop.AdServiceGrpc*",
+  "pluginVersion": "3.1.791"
 }
