@@ -14,6 +14,9 @@
 
 FROM openjdk:18-slim as builder
 
+ARG RM_DEV_SL_TOKEN=local
+ENV RM_DEV_SL_TOKEN ${RM_DEV_SL_TOKEN}
+
 WORKDIR /app
 
 RUN apt-get -y update && apt-get -y install git
@@ -30,6 +33,9 @@ RUN chmod +x gradlew
 RUN ./gradlew downloadRepos
 
 COPY . .
+
+RUN echo  '{ "token": "$RM_DEV_SL_TOKEN", "createBuildSessionId": true, "appName": "adservice", "branchName": "master", "buildName": "$(date +%F_%T)", "packagesIncluded": "*hipstershop.AdService*", "packagesExcluded": "*hipstershop.AdServiceGrpc*", "pluginVersion": "3.1.791"}' > slgradle.json
+
 RUN java -jar sl-build-scanner.jar -gradle -configfile slgradle.json -workspacepath .
 RUN chmod +x gradlew
 RUN ./gradlew installDist
