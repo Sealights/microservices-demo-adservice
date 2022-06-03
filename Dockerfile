@@ -34,7 +34,7 @@ RUN ./gradlew downloadRepos
 
 COPY . .
 
-RUN echo  '{ "token": "$RM_DEV_SL_TOKEN", "createBuildSessionId": true, "appName": "adservice", "branchName": "master", "buildName": "$(date +%F_%T)", "packagesIncluded": "*hipstershop.AdService*", "packagesExcluded": "*hipstershop.AdServiceGrpc*", "pluginVersion": "3.1.791"}' > slgradle.json
+RUN echo '{ "token": "'$RM_DEV_SL_TOKEN'", "createBuildSessionId": true, "appName": "adservice", "branchName": "master", "buildName": "'$(date +%F_%T)'", "packagesIncluded": "*hipstershop.AdService*", "packagesExcluded": "*hipstershop.AdServiceGrpc*", "pluginVersion": "3.1.791"}' > slgradle.json
 
 RUN java -jar sl-build-scanner.jar -gradle -configfile slgradle.json -workspacepath .
 RUN chmod +x gradlew
