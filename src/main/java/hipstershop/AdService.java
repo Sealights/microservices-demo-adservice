@@ -25,7 +25,7 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.StatusRuntimeException;
 import io.grpc.health.v1.HealthCheckResponse.ServingStatus;
-import io.grpc.protobuf.services.*;
+import io.grpc.protobuf.services.HealthStatusManager;
 import io.grpc.stub.StreamObserver;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,7 +35,6 @@ import java.util.Random;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 
 public final class AdService {
 
@@ -80,7 +79,7 @@ public final class AdService {
     }
   }
 
-  private static class AdServiceImpl extends hipstershop.AdServiceGrpc.AdServiceImplBase {
+  static class AdServiceImpl extends hipstershop.AdServiceGrpc.AdServiceImplBase {
 
     /**
      * Retrieves ads based on context provided in the request {@code AdRequest}.
@@ -119,13 +118,13 @@ public final class AdService {
 
   private static final ImmutableListMultimap<String, Ad> adsMap = createAdsMap();
 
-  private Collection<Ad> getAdsByCategory(String category) {
+  Collection<Ad> getAdsByCategory(String category) {
     return adsMap.get(category);
   }
 
   private static final Random random = new Random();
 
-  private List<Ad> getRandomAds() {
+  List<Ad> getRandomAds() {
     List<Ad> ads = new ArrayList<>(MAX_ADS_TO_SERVE);
     Collection<Ad> allAds = adsMap.values();
     for (int i = 0; i < MAX_ADS_TO_SERVE; i++) {
@@ -134,7 +133,7 @@ public final class AdService {
     return ads;
   }
 
-  private static AdService getInstance() {
+  static AdService getInstance() {
     return service;
   }
 
@@ -145,7 +144,7 @@ public final class AdService {
     }
   }
 
-  private static ImmutableListMultimap<String, Ad> createAdsMap() {
+  static ImmutableListMultimap<String, Ad> createAdsMap() {
     Ad hairdryer =
         Ad.newBuilder()
             .setRedirectUrl("/product/2ZYFJ3GM2N")
