@@ -34,11 +34,12 @@ RUN ./gradlew downloadRepos
 
 COPY . .
 
-RUN echo '{ "token": "'$RM_DEV_SL_TOKEN'", "createBuildSessionId": true, "appName": "adservice", "branchName": "master", "buildName": "'$(date +%F_%T)'", "packagesIncluded": "*hipstershop.AdService*", "packagesExcluded": "*hipstershop.AdServiceGrpc*", "pluginVersion": "3.1.791"}' > slgradle.json
+RUN echo '{ "token": "'$RM_DEV_SL_TOKEN'", "createBuildSessionId": true, "appName": "adservice", "branchName": "master", "buildName": "'$(date +%F_%T)'", "packagesIncluded": "*hipstershop.AdService*", "packagesExcluded": "*hipstershop.AdServiceGrpc*", "testTasksAndStages": {"test": "Unit Tests"}}' > slgradle.json
 
 RUN java -jar sl-build-scanner.jar -gradle -configfile slgradle.json -workspacepath .
 RUN chmod +x gradlew
 RUN ./gradlew installDist
+RUN ./gradlew test
 
 FROM openjdk:18-slim
 
@@ -53,10 +54,6 @@ RUN GRPC_HEALTH_PROBE_VERSION=v0.4.8 && \
 WORKDIR /app
 COPY --from=builder /app .
 COPY agent/opentelemetry-javaagent.jar .
-
-ENV JAVA_TOOL_OPTIONS="-javaagent:sl-test-listener.jar -Dsl.tags=script,container -Dsl.labId=integ_test_otel"
-
-RUN apt-get update && apt-get install -y procps
 
 EXPOSE 9555
 ENTRYPOINT ["/app/build/install/hipstershop/bin/AdService"]
