@@ -19,8 +19,8 @@ def jacksonVersion = "2.13.2"
 def protocVersion = "3.20.0"
 
 tasks.withType(JavaCompile) {
-    sourceCompatibility = JavaVersion.VERSION_18
-    targetCompatibility = JavaVersion.VERSION_18
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 ext {
@@ -97,8 +97,6 @@ task adService(type: CreateStartScripts) {
     applicationName = 'AdService'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
-    defaultJvmOpts =
-        ["-javaagent:/app/opentelemetry-javaagent.jar"]
 }
 
 task adServiceClient(type: CreateStartScripts) {
@@ -106,12 +104,14 @@ task adServiceClient(type: CreateStartScripts) {
     applicationName = 'AdServiceClient'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
-    defaultJvmOpts =
-        ["-javaagent:/app/opentelemetry-javaagent.jar"]
 }
 
 applicationDistribution.into('bin') {
     from(adService)
     from(adServiceClient)
     fileMode = 0755
+}
+
+test {
+    useJUnit()
 }
