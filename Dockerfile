@@ -62,7 +62,7 @@ RUN if [ $IS_PR = 0 ]; then \
 else \ 
     echo "Pull request"; \
     echo '{ "token": "'$RM_DEV_SL_TOKEN'", "createBuildSessionId": true, "appName": "adservice", "targetBranch": "${TARGET_BRANCH}", "latestCommit": "${LATEST_COMMIT}", "pullRequestNumber": "${PR_NUMBER}", "repositoryUrl": "${TARGET_REPO_URL}", "packagesIncluded": "*hipstershop.AdService*", "packagesExcluded": "*hipstershop.AdServiceGrpc*", "testTasksAndStages": {"test": "Unit Tests"}}' > slgradle.json ; \    
-    java -jar sl-build-scanner.jar -prConfig -gradle -configfile slgradle.json -workspacepath . ; \
+    java -jar sl-build-scanner.jar -prConfig -configfile slgradle.json -workspacepath . ; \
 fi
 
 RUN chmod +x gradlew
