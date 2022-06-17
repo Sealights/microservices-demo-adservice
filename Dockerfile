@@ -15,7 +15,27 @@
 FROM openjdk:18-slim as builder
 
 ARG RM_DEV_SL_TOKEN=local
+ARG RM_DEV_SL_TOKEN=local
+ARG IS_PR=""
+ARG TARGET_BRANCH=""
+ARG LATEST_COMMIT=""
+ARG PR_NUMBER=""
+ARG TARGET_REPO_URL=""
+
 ENV RM_DEV_SL_TOKEN ${RM_DEV_SL_TOKEN}
+ENV RM_DEV_SL_TOKEN ${RM_DEV_SL_TOKEN}
+ENV IS_PR ${IS_PR}
+ENV TARGET_BRANCH ${TARGET_BRANCH}
+ENV LATEST_COMMIT ${LATEST_COMMIT}
+ENV PR_NUMBER ${PR_NUMBER}
+ENV TARGET_REPO_URL ${TARGET_REPO_URL}
+
+RUN echo "========================================================="
+RUN echo "targetBranch: ${TARGET_BRANCH}"
+RUN echo "latestCommit: ${LATEST_COMMIT}"
+RUN echo "pullRequestNumber ${PR_NUMBER}"
+RUN echo "repositoryUrl ${TARGET_REPO_URL}"
+RUN echo "========================================================="
 
 WORKDIR /app
 
@@ -34,9 +54,17 @@ RUN ./gradlew downloadRepos
 
 COPY . .
 
-RUN echo '{ "token": "'$RM_DEV_SL_TOKEN'", "createBuildSessionId": true, "appName": "adservice", "branchName": "master", "buildName": "'$(date +%F_%T)'", "packagesIncluded": "*hipstershop.AdService*", "packagesExcluded": "*hipstershop.AdServiceGrpc*", "testTasksAndStages": {"test": "Unit Tests"}}' > slgradle.json
+RUN if [ $IS_PR = 0 ]; then \
+    echo "Check-in to repo"; \
+    echo '{ "token": "'$RM_DEV_SL_TOKEN'", "createBuildSessionId": true, "appName": "adservice", "branchName": "master", "buildName": "'$(date +%F_%T)'", "packagesIncluded": "*hipstershop.AdService*", "packagesExcluded": "*hipstershop.AdServiceGrpc*", "testTasksAndStages": {"test": "Unit Tests"}}' > slgradle.json ; \
+    java -jar sl-build-scanner.jar -gradle -configfile slgradle.json -workspacepath . ; \
+    BUILD_NAME=$(date +%F_%T) && ./node_modules/.bin/slnodejs config --token $RM_DEV_SL_TOKEN --appname "currencyservice" --branch "master" --build "${BUILD_NAME}" ; \
+else \ 
+    echo "Pull request"; \    
+    java -jar sl-build-scanner.jar -prConfig -token $RM_DEV_SL_TOKEN -appname "adservice"  -targetBranch "${TARGET_BRANCH}" \
+        -latestCommit "${LATEST_COMMIT}" -pullRequestNumber "${PR_NUMBER}" -repoUrl "${TARGET_REPO_URL}" -packagesincluded "*hipstershop.AdService*" -packagesexcluded "*hipstershop.AdServiceGrpc*" ; \  
+fi
 
-RUN java -jar sl-build-scanner.jar -gradle -configfile slgradle.json -workspacepath .
 RUN chmod +x gradlew
 RUN ./gradlew installDist
 RUN ./gradlew test
