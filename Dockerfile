@@ -62,7 +62,7 @@ RUN if [ $IS_PR = 0 ]; then \
 else \ 
     echo "Pull request"; \    
     java -jar sl-build-scanner.jar -prConfig -token $RM_DEV_SL_TOKEN -appname "adservice"  -targetBranch "${TARGET_BRANCH}" \
-        -latestCommit "${LATEST_COMMIT}" -pullRequestNumber "${PR_NUMBER}" -repoUrl "${TARGET_REPO_URL}"; \  
+        -latestCommit "${LATEST_COMMIT}" -pullRequestNumber "${PR_NUMBER}" -repoUrl "${TARGET_REPO_URL}" -packagesincluded "*hipstershop.AdService*" -packagesexcluded "*hipstershop.AdServiceGrpc*" ; \  
 fi
 
 RUN chmod +x gradlew
