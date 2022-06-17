@@ -61,8 +61,8 @@ RUN if [ $IS_PR = 0 ]; then \
     BUILD_NAME=$(date +%F_%T) && ./node_modules/.bin/slnodejs config --token $RM_DEV_SL_TOKEN --appname "currencyservice" --branch "master" --build "${BUILD_NAME}" ; \
 else \ 
     echo "Pull request"; \    
-    java -jar sl-build-scanner.jar -prConfig --token $RM_DEV_SL_TOKEN --appname "adservice"  --targetBranch "${TARGET_BRANCH}" \
-        --latestCommit "${LATEST_COMMIT}" --pullRequestNumber "${PR_NUMBER}" --repositoryUrl "${TARGET_REPO_URL}"; \  
+    java -jar sl-build-scanner.jar -prConfig -token $RM_DEV_SL_TOKEN -appname "adservice"  -targetBranch "${TARGET_BRANCH}" \
+        -latestCommit "${LATEST_COMMIT}" -pullRequestNumber "${PR_NUMBER}" -repositoryUrl "${TARGET_REPO_URL}"; \  
 fi
 
 RUN chmod +x gradlew
