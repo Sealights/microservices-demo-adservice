@@ -54,15 +54,14 @@ RUN ./gradlew downloadRepos
 
 COPY . .
 
-RUN if [[ $IS_PR -eq 0 ]]; then \
+RUN if [ $IS_PR = 0 ]; then \
     echo "Check-in to repo"; \
     echo '{ "token": "'$RM_DEV_SL_TOKEN'", "createBuildSessionId": true, "appName": "adservice", "branchName": "master", "buildName": "'$(date +%F_%T)'", "packagesIncluded": "*hipstershop.AdService*", "packagesExcluded": "*hipstershop.AdServiceGrpc*", "testTasksAndStages": {"test": "Unit Tests"}}' > slgradle.json ; \
     java -jar sl-build-scanner.jar -gradle -configfile slgradle.json -workspacepath . ; \
     BUILD_NAME=$(date +%F_%T) && ./node_modules/.bin/slnodejs config --token $RM_DEV_SL_TOKEN --appname "currencyservice" --branch "master" --build "${BUILD_NAME}" ; \
 else \ 
     echo "Pull request"; \
-    echo '{ "token": "'$RM_DEV_SL_TOKEN'", "createBuildSessionId": true, "appName": "adservice", "targetBranch": "${TARGET_BRANCH}", "latestCommit": "${LATEST_COMMIT}", "pullRequestNumber": "${PR_NUMBER}", "repositoryUrl": "${TARGET_REPO_URL}", "packagesIncluded": "*hipstershop.AdService*", "packagesExcluded": "*hipstershop.AdServiceGrpc*", "testTasksAndStages": {"test": "Unit Tests"}}' > slgradle.json ; \
-    
+    echo '{ "token": "'$RM_DEV_SL_TOKEN'", "createBuildSessionId": true, "appName": "adservice", "targetBranch": "${TARGET_BRANCH}", "latestCommit": "${LATEST_COMMIT}", "pullRequestNumber": "${PR_NUMBER}", "repositoryUrl": "${TARGET_REPO_URL}", "packagesIncluded": "*hipstershop.AdService*", "packagesExcluded": "*hipstershop.AdServiceGrpc*", "testTasksAndStages": {"test": "Unit Tests"}}' > slgradle.json ; \    
     java -jar sl-build-scanner.jar -prConfig -gradle -configfile slgradle.json -workspacepath . ; \
 fi
 
