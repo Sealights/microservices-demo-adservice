@@ -1,0 +1,22 @@
+{
+  "tokenFile" : "sltoken.txt",
+  "createBuildSessionId": true,
+  "appName": "adservice",
+  "branchName": "master@vh",
+  "buildName": "${new Date().format('yyyy-MM-dd_HH:mm:ss')}",
+  "packagesIncluded": "*hipstershop*",
+  "packagesExcluded": "",
+  "labId" : "integ_master_813e_SLBoutique",
+  "pluginVersion" : "3.1.791",
+  "scannerJar" : "sl-build-scanner.jar",
+  "listenerJar" : "java-agent-bootstrapper-3.0.0-SNAPSHOT.jar",
+  "testTasksAndStages": {
+    "test": "Unit Tests"
+  },
+  "sealightsJvmParams": {
+    "sl.otel.enabled": true,
+    "sl.otel.loadAgent": true,
+    "sl.otel.exporterType" : "grpc",
+    "sl.otel.endpoint": "${System.getenv('SL_OTEL_ENDPOINT')}"
+  }
+}
