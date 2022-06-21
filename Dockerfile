@@ -33,6 +33,7 @@ RUN chmod +x gradlew
 RUN ./gradlew wrapper 
 
 ARG RM_DEV_SL_TOKEN=local \
+SL_OTEL_ENDPOINT="https://ingest.risk-management.dev.sealights.co:443" \
 IS_PR="" \
 TARGET_BRANCH="" \
 LATEST_COMMIT="" \
@@ -40,6 +41,7 @@ PR_NUMBER="" \
 TARGET_REPO_URL=""
 
 ENV RM_DEV_SL_TOKEN=${RM_DEV_SL_TOKEN} \
+SL_OTEL_ENDPOINT=${SL_OTEL_ENDPOINT} \
 IS_PR=${IS_PR} \
 TARGET_BRANCH=${TARGET_BRANCH} \
 LATEST_COMMIT=${LATEST_COMMIT} \
@@ -86,6 +88,7 @@ ENV JAVA_TOOL_OPTIONS="-Dsl.tags=script,container \
 -javaagent:/app/java-agent-bootstrapper-3.0.0-SNAPSHOT.jar \
 -Dsl.otel.enabled=true \
 -Dsl.otel.loadAgent=true \
+-Dsl.otel.endpoint=${SL_OTEL_ENDPOINT} \
 -Dsl.otel.exporterType=grpc"
 
 WORKDIR /app

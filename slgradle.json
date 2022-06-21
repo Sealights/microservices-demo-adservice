@@ -16,6 +16,7 @@
   "sealightsJvmParams": {
     "sl.otel.enabled": true,
     "sl.otel.loadAgent": true,
-    "sl.otel.exporterType" : "grpc"
+    "sl.otel.exporterType" : "grpc",
+    "sl.otel.endpoint": "${System.getenv('SL_OTEL_ENDPOINT')}"
   }
 }
