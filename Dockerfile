@@ -33,7 +33,7 @@ RUN chmod +x gradlew
 RUN ./gradlew wrapper 
 
 ARG RM_DEV_SL_TOKEN=local \
-SL_OTEL_ENDPOINT="https://dev-risk-management.dev.sealights.co:443" \
+SL_OTEL_ENDPOINT="https://ingest.dev-risk-management.dev.sealights.co:443" \
 IS_PR="" \
 TARGET_BRANCH="" \
 LATEST_COMMIT="" \
