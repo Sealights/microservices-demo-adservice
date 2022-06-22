@@ -57,8 +57,7 @@ COPY . .
 RUN if [ $IS_PR = 0 ]; then \
     echo "Check-in to repo"; \
     echo '{ "token": "'$RM_DEV_SL_TOKEN'", "createBuildSessionId": true, "appName": "adservice", "branchName": "master", "buildName": "'$(date +%F_%T)'", "packagesIncluded": "*hipstershop.AdService*", "packagesExcluded": "*hipstershop.AdServiceGrpc*", "testTasksAndStages": {"test": "Unit Tests"}}' > slgradle.json ; \
-    java -jar sl-build-scanner.jar -gradle -configfile slgradle.json -workspacepath . ; \
-    BUILD_NAME=$(date +%F_%T) && ./node_modules/.bin/slnodejs config --token $RM_DEV_SL_TOKEN --appname "currencyservice" --branch "master" --build "${BUILD_NAME}" ; \
+    java -jar sl-build-scanner.jar -gradle -configfile slgradle.json -workspacepath . ; \    
 else \ 
     echo "Pull request"; \    
     java -jar sl-build-scanner.jar -prConfig -token $RM_DEV_SL_TOKEN -appname "adservice"  -targetBranch "${TARGET_BRANCH}" \
