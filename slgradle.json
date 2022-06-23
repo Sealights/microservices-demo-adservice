@@ -1,0 +1,25 @@
+{
+  "tokenFile" : "sltoken.txt",
+  "createBuildSessionId": {{CREATE_BUILD_SESSION_ID}},
+  "appName": "adservice",
+  "branchName": "master",
+  "buildName": "${new Date().format('yyyy-MM-dd_HH:mm:ss')}",
+  "packagesIncluded": "*hipstershop.AdService*",
+  "packagesExcluded": "*hipstershop.AdServiceGrpc*",
+  "labId" : "integ_master_813e_SLBoutique",
+  "pluginVersion" : "3.1.791",
+  "scannerJar" : "sl-build-scanner.jar",
+  "listenerJar" : "java-agent-bootstrapper-3.0.0-SNAPSHOT.jar",
+  "testTasksAndStages": {
+    "test": "Unit Tests"
+  },
+  "createPRBuildSessionId" : {{IS_PR}},
+  "latestCommit" : "{{LATEST_COMMIT}}",
+  "targetBranch" : "{{TARGET_BRANCH}}",
+  "pullRequestNumber" : {{PR_NUMBER}},
+  "repositoryUrl" : "{{TARGET_REPO_URL}}",
+  "sealightsJvmParams": {
+    "sl.otel.enabled": true,
+    "sl.otel.loadAgent": true
+  }
+}
