@@ -63,7 +63,8 @@ RUN echo "${RM_DEV_SL_TOKEN}" > sltoken.txt
 COPY java-agent-bootstrapper-3.0.0-SNAPSHOT.jar sl-test-listener.jar
 COPY slgradle.json .
 
-RUN sed --in-place \
+RUN if [ -z "$PR_NUMBER" ]; then PR_NUMBER=0; fi;\
+sed --in-place \
 -e "s#{{TARGET_BRANCH}}#${TARGET_BRANCH}#g" \
 -e "s#{{LATEST_COMMIT}}#${LATEST_COMMIT}#g" \
 -e "s#{{PR_NUMBER}}#${PR_NUMBER}#g" \
