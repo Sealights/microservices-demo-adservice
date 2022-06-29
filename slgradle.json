@@ -3,7 +3,7 @@
   "createBuildSessionId": {{CREATE_BUILD_SESSION_ID}},
   "appName": "adservice",
   "branchName": "master",
-  "buildName": "${new Date().format('yyyy-MM-dd_HH:mm:ss')}",
+  "buildName": "{{BUILD_NAME}}",
   "packagesIncluded": "*hipstershop.AdService*",
   "packagesExcluded": "*hipstershop.AdServiceGrpc*",
   "labId" : "integ_master_813e_SLBoutique",
