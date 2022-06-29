@@ -71,6 +71,7 @@ sed --in-place \
 -e "s#{{LATEST_COMMIT}}#${LATEST_COMMIT}#g" \
 -e "s#{{PR_NUMBER}}#${PR_NUMBER}#g" \
 -e "s#{{TARGET_REPO_URL}}#${TARGET_REPO_URL}#g" \
+-e "s#{{BUILD_NAME}}#${BUILD_NAME}#g" \
 slgradle.json
 
 RUN if [ "$IS_PR" -eq 0 ]; then \
