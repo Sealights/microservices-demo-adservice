@@ -21,6 +21,7 @@ import com.google.common.collect.Iterables;
 import hipstershop.Demo.Ad;
 import hipstershop.Demo.AdRequest;
 import hipstershop.Demo.AdResponse;
+import hipstershop.http.netty.HttpServer;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.StatusRuntimeException;
@@ -79,14 +80,14 @@ public final class AdService {
     }
   }
 
-  static class AdServiceImpl extends hipstershop.AdServiceGrpc.AdServiceImplBase {
+  public static class AdServiceImpl extends hipstershop.AdServiceGrpc.AdServiceImplBase {
 
     /**
      * Retrieves ads based on context provided in the request {@code AdRequest}.
      *
-     * @param req the request containing context.
-     * @param responseObserver the stream observer which gets notified with the value of {@code
-     *     AdResponse}
+     * @param req              the request containing context.
+     * @param responseObserver the stream observer which gets notified with the value of
+     *                         {@code AdResponse}
      */
     @Override
     public void getAds(AdRequest req, StreamObserver<AdResponse> responseObserver) {
@@ -118,13 +119,13 @@ public final class AdService {
 
   private static final ImmutableListMultimap<String, Ad> adsMap = createAdsMap();
 
-  Collection<Ad> getAdsByCategory(String category) {
+  public Collection<Ad> getAdsByCategory(String category) {
     return adsMap.get(category);
   }
 
   private static final Random random = new Random();
 
-  List<Ad> getRandomAds() {
+  public List<Ad> getRandomAds() {
     List<Ad> ads = new ArrayList<>(MAX_ADS_TO_SERVE);
     Collection<Ad> allAds = adsMap.values();
     for (int i = 0; i < MAX_ADS_TO_SERVE; i++) {
@@ -133,11 +134,13 @@ public final class AdService {
     return ads;
   }
 
-  static AdService getInstance() {
+  public static AdService getInstance() {
     return service;
   }
 
-  /** Await termination on the main thread since the grpc library uses daemon threads. */
+  /**
+   * Await termination on the main thread since the grpc library uses daemon threads.
+   */
   private void blockUntilShutdown() throws InterruptedException {
     if (server != null) {
       server.awaitTermination();
@@ -190,12 +193,16 @@ public final class AdService {
         .build();
   }
 
-  /** Main launches the server from the command line. */
-  public static void main(String[] args) throws IOException, InterruptedException {
+  /**
+   * Main launches the server from the command line.
+   */
+  public static void main(String[] args) throws Exception {
     // Start the RPC server. You shouldn't see any output from gRPC before this.
     logger.info("AdService starting.");
     final AdService service = AdService.getInstance();
+    final HttpServer httpServer = new HttpServer();
     service.start();
+    httpServer.start();
     service.blockUntilShutdown();
   }
 }
