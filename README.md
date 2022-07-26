@@ -24,14 +24,14 @@ curl -svg localhost:9556/ads | jq .
 
 ```json
 {
-  "random": [
+  "ads": [
     {
-      "productPath": "/product/1YMWWN1N4O",
-      "text": "Watch for sale. Buy one, get second kit for free"
+      "redirect_url": "/product/L9ECAV7KIM",
+      "text": "Loafers for sale. Buy one, get second one for free"
     },
     {
-      "productPath": "/product/6E92ZMYYFZ",
-      "text": "Mug for sale. Buy two, get third one for free"
+      "redirect_url": "/product/2ZYFJ3GM2N",
+      "text": "Hairdryer for sale. 50% off."
     }
   ]
 }
@@ -42,22 +42,45 @@ curl -svg localhost:9556/ads | jq .
 * Request
 
 ```text
-curl -svg "localhost:9556/ads?category=decor&category=accessories" | jq .
+curl -svg "localhost:9556/ads?category=decor&context_keys=accessories" | jq .
 ```
 
 * Response
 
 ```json
 {
-  "decor": [
+  "ads": [
     {
-      "productPath": "/product/0PUK6V6EV0",
+      "redirect_url": "/product/0PUK6V6EV0",
       "text": "Candle holder for sale. 30% off."
-    }
-  ],
-  "accessories": [
+    },
     {
-      "productPath": "/product/1YMWWN1N4O",
+      "redirect_url": "/product/1YMWWN1N4O",
+      "text": "Watch for sale. Buy one, get second kit for free"
+    }
+  ]
+}
+```
+
+### Request ads with POST
+
+* Request
+
+```text
+curl -svg "localhost:9556/ads" -d '{"context_keys": ["decor", "accessories", "decor" ] }' | jq .
+```
+
+* Response
+
+```json
+{
+  "ads": [
+    {
+      "redirect_url": "/product/0PUK6V6EV0",
+      "text": "Candle holder for sale. 30% off."
+    },
+    {
+      "redirect_url": "/product/1YMWWN1N4O",
       "text": "Watch for sale. Buy one, get second kit for free"
     }
   ]
