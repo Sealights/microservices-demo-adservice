@@ -24,6 +24,11 @@ public class PlainTextResponseBuilder implements ResponseBuilder {
   }
 
   @Override
+  public Object get(String key) {
+    return "";
+  }
+
+  @Override
   public String toString() {
     return stringBuilder.toString();
   }
