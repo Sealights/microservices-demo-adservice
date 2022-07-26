@@ -7,5 +7,4 @@ public interface ResponseBuilder {
   ResponseBuilder append(String key, Object object);
 
   String build();
-
 }
