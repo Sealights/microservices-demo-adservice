@@ -22,7 +22,7 @@ public class PlainTextResponseBuilder implements ResponseBuilder {
   public String build() {
     return stringBuilder.toString();
   }
-
+  
   @Override
   public String toString() {
     return stringBuilder.toString();
