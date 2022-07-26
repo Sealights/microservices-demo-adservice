@@ -36,7 +36,7 @@ public class HttpUtils {
     return inputHeadersMap;
   }
 
-  public static Map<String, List<String>> inputParamsToMap(HttpRequest request) {
+  public static Map<String, List<String>> inputQueryStringParamsToMap(HttpRequest request) {
     QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.uri());
     return queryStringDecoder.parameters();
   }
