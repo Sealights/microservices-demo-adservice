@@ -3,7 +3,7 @@ package hipstershop.http.netty.json;
 import static hipstershop.http.netty.HttpUtils.APPLICATION_JSON_CONTENT_TYPE_HEADER;
 import static hipstershop.http.netty.HttpUtils.getRequestBody;
 import static hipstershop.http.netty.HttpUtils.inputHeadersToMap;
-import static hipstershop.http.netty.HttpUtils.inputParamsToMap;
+import static hipstershop.http.netty.HttpUtils.inputQueryStringParamsToMap;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 import com.google.gson.Gson;
@@ -20,7 +20,7 @@ public class JsonMessagesHandler implements MessagesHandler {
   public static final String REQUEST_BODY = "requestBody";
   public static final String INPUT_PARAMS = "inputParams";
   public static final String INPUT_HEADERS = "inputHeaders";
-  private static Gson gson = new GsonBuilder()
+  protected static Gson gson = new GsonBuilder()
       .setPrettyPrinting()
       .create();
 
@@ -34,7 +34,7 @@ public class JsonMessagesHandler implements MessagesHandler {
 
   @Override
   public void handleHttpRequest(ResponseBuilder responseData, HttpRequest request) {
-    responseData.append(INPUT_PARAMS, inputParamsToMap(request));
+    responseData.append(INPUT_PARAMS, inputQueryStringParamsToMap(request));
     responseData.append(INPUT_HEADERS, inputHeadersToMap(request));
   }
 
