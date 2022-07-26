@@ -8,4 +8,5 @@ public interface ResponseBuilder {
 
   String build();
 
+  Object get(String key);
 }
