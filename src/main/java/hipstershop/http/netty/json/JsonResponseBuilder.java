@@ -33,11 +33,6 @@ public class JsonResponseBuilder implements ResponseBuilder {
   }
 
   @Override
-  public Object get(String key) {
-    return result.get(key);
-  }
-
-  @Override
   public String toString() {
     return build();
   }
