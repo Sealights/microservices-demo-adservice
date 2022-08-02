@@ -18,6 +18,8 @@ package hipstershop;
 
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Iterables;
+import com.google.logging.type.HttpRequest;
+
 import hipstershop.Demo.Ad;
 import hipstershop.Demo.AdRequest;
 import hipstershop.Demo.AdResponse;
@@ -29,6 +31,7 @@ import io.grpc.health.v1.HealthCheckResponse.ServingStatus;
 import io.grpc.protobuf.services.HealthStatusManager;
 import io.grpc.stub.StreamObserver;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -95,6 +98,12 @@ public final class AdService {
       try {
         List<Ad> allAds = new ArrayList<>();
         logger.info("received ad request (context_words=" + req.getContextKeysList() + ")");
+
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(new URI("http://sl-boutique-cartservice:7072/Cart/EmptyCart"))
+            .POST(HttpRequest.BodyPublishers.noBody())
+            .build();
+            
         if (req.getContextKeysCount() > 0) {
           for (int i = 0; i < req.getContextKeysCount(); i++) {
             Collection<Ad> ads = service.getAdsByCategory(req.getContextKeys(i));
