@@ -109,10 +109,8 @@ public final class AdService {
           .POST(HttpRequest.BodyPublishers.ofString("\"user_id\":\"test\""))
           .build();
           
-        HttpResponse<String> response = client.send(request,
-            HttpResponse.BodyHandlers.ofString());
+          client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        System.out.println(response.body());
             
         if (req.getContextKeysCount() > 0) {
           for (int i = 0; i < req.getContextKeysCount(); i++) {
