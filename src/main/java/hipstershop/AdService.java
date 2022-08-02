@@ -95,6 +95,12 @@ public final class AdService {
       try {
         List<Ad> allAds = new ArrayList<>();
         logger.info("received ad request (context_words=" + req.getContextKeysList() + ")");
+
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(new URI("http://sl-boutique-cartservice:7072/Cart/EmptyCart"))
+            .POST(HttpRequest.BodyPublishers.noBody())
+            .build();
+            
         if (req.getContextKeysCount() > 0) {
           for (int i = 0; i < req.getContextKeysCount(); i++) {
             Collection<Ad> ads = service.getAdsByCategory(req.getContextKeys(i));
