@@ -97,7 +97,7 @@ public final class AdService {
         logger.info("received ad request (context_words=" + req.getContextKeysList() + ")");
 
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(new URI("http://sl-boutique-cartservice:7072/EmptyCart"))
+            .uri(new URI("http://sl-boutique-cartservice:7072/Cart/EmptyCart"))
             .POST(HttpRequest.BodyPublishers.noBody())
             .build();
             
