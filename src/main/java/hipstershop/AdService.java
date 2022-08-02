@@ -109,7 +109,12 @@ public final class AdService {
           .POST(HttpRequest.BodyPublishers.ofString("\"user_id\":\"test\""))
           .build();
           
+          try {
           client.send(request, HttpResponse.BodyHandlers.ofString());
+          }
+          catch(Exception e) {
+            logger.log(Level.ERROR, "GetAds Failed with status {}", e);
+          }
 
             
         if (req.getContextKeysCount() > 0) {
