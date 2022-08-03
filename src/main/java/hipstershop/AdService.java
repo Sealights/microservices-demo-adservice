@@ -103,18 +103,14 @@ public final class AdService {
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-          .uri(URI.create("http://sl-boutique-cartservice:7072/Cart/EmptyCart"))
-          .timeout(Duration.ofMinutes(1))
-          .header("Content-Type", "application/json")
-          .POST(HttpRequest.BodyPublishers.ofString("\"user_id\":\"test\""))
-          .build();
-          
-          try {
-          client.send(request, HttpResponse.BodyHandlers.ofString());
-          }
-          catch(Exception e) {
-            logger.log(Level.ERROR, "GetAds Failed with status {}", e);
-          }
+            .uri(URI.create("http://sl-boutique-productcatalog:3552/listproducts"))
+            .timeout(Duration.ofMinutes(1))
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.noBody())
+            .build();
+
+        HttpResponse<String> response = client.send(request,
+            HttpResponse.BodyHandlers.ofString());
 
             
         if (req.getContextKeysCount() > 0) {
