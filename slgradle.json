@@ -9,7 +9,7 @@
   "labId" : "integ_master_813e_SLBoutique",
   "pluginVersion" : "3.1.791",
   "scannerJar" : "sl-build-scanner.jar",
-  "listenerJar" : "java-agent-bootstrapper-3.0.0-SNAPSHOT.jar",
+  "listenerJar" : "sl-test-listener.jar",
   "testTasksAndStages": {
     "test": "Unit Tests"
   },
@@ -19,7 +19,7 @@
   "pullRequestNumber" : {{PR_NUMBER}},
   "repositoryUrl" : "{{TARGET_REPO_URL}}",
   "sealightsJvmParams": {
-    "sl.otel.enabled": true,
-    "sl.otel.loadAgent": true
+    "sl.enableUpgrade" : false,
+    "sl.otel.enabled": true
   }
 }
