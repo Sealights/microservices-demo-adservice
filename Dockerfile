@@ -19,8 +19,6 @@ WORKDIR /app
 RUN apt-get -y update && apt-get -y install git
 
 RUN apt-get install wget zip git
-RUN wget -nv https://agents.sealights.co/sealights-java/sealights-java-latest.zip
-RUN unzip -oq sealights-java-latest.zip && rm sealights-java-latest.zip
 
 RUN GRPC_HEALTH_PROBE_VERSION=v0.4.8 && \
     wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64 && \
@@ -31,6 +29,12 @@ COPY gradlew .
 COPY gradle gradle
 RUN chmod +x gradlew
 RUN ./gradlew wrapper
+
+ARG AGENT_VERSION=3.1.2119
+RUN wget -nv https://agents.sealights.co/sealights-java/sealights-java-${AGENT_VERSION}.zip
+RUN unzip -oq sealights-java-${AGENT_VERSION}.zip && rm sealights-java-${AGENT_VERSION}.zip
+RUN mv -v sl-test-listener-${AGENT_VERSION}.jar sl-test-listener.jar
+RUN mv -v sl-build-scanner-${AGENT_VERSION}.jar sl-build-scanner.jar
 
 ARG RM_DEV_SL_TOKEN=local \
 IS_PR="" \
@@ -62,7 +66,6 @@ RUN ./gradlew downloadRepos
 COPY . .
 
 RUN echo "${RM_DEV_SL_TOKEN}" > sltoken.txt
-COPY java-agent-bootstrapper-3.0.0-SNAPSHOT.jar sl-test-listener.jar
 COPY slgradle.json .
 
 RUN if [ -z "$PR_NUMBER" ]; then PR_NUMBER=0; fi;\
@@ -90,11 +93,11 @@ RUN ./gradlew test
 
 FROM openjdk:18-slim
 
-ENV JAVA_TOOL_OPTIONS="-Dsl.tags=script,container \
+ENV JAVA_OPTS="-Dsl.tags=script,container \
 -Dsl.labId=integ_master_813e_SLBoutique \
--javaagent:/app/java-agent-bootstrapper-3.0.0-SNAPSHOT.jar \
--Dsl.otel.enabled=true \
--Dsl.otel.loadAgent=true"
+-javaagent:/app/sl-test-listener.jar \
+-Dsl.enableUpgrade=false \
+-Dsl.otel.enabled=true"
 
 WORKDIR /app
 COPY --from=builder /app .
