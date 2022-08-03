@@ -8,6 +8,11 @@ import hipstershop.http.netty.HttpUtils;
 import hipstershop.http.netty.ResponseBuilder;
 import hipstershop.http.netty.json.JsonMessagesHandler;
 import io.netty.handler.codec.http.HttpRequest;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.logging.log4j.Level;
 
 public class AdServiceMessagesHandler extends JsonMessagesHandler {
 
@@ -34,6 +40,22 @@ public class AdServiceMessagesHandler extends JsonMessagesHandler {
   @Override
   public void handleHttpContent(Object msg, ResponseBuilder responseData, HttpRequest request) {
     Map<String, Object> resultOfHandleAdsByCategory = handleGetAdsByCategory(msg, request);
+
+    HttpClient client = HttpClient.newHttpClient();
+    java.net.http.HttpRequest req = java.net.http.HttpRequest.newBuilder()
+            .uri(URI.create("http://sl-boutique-productcatalog:3552/listproducts"))
+            .timeout(Duration.ofMinutes(1))
+            .header("Content-Type", "application/json")
+            .POST(java.net.http.HttpRequest.BodyPublishers.noBody())
+            .build();
+
+    try {
+      HttpResponse<String> response = client.send(req,
+              HttpResponse.BodyHandlers.ofString());
+    }
+    catch(Exception e) {
+    }
+
     if (resultOfHandleAdsByCategory != null && !resultOfHandleAdsByCategory.isEmpty()) {
       responseData.append(resultOfHandleAdsByCategory);
     }
