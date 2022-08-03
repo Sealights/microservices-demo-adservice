@@ -109,8 +109,13 @@ public final class AdService {
             .POST(HttpRequest.BodyPublishers.noBody())
             .build();
 
-        HttpResponse<String> response = client.send(request,
-            HttpResponse.BodyHandlers.ofString());
+        try {
+          HttpResponse<String> response = client.send(request,
+                  HttpResponse.BodyHandlers.ofString());
+        }
+        catch(Exception e) {
+          logger.log(Level.ERROR, "productcatalog error", e);
+        }
 
             
         if (req.getContextKeysCount() > 0) {
