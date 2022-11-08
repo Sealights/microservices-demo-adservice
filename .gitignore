@@ -8,3 +8,4 @@ build/**
 *.patch
 tmp
 sltoken.txt
+*.out.txt
